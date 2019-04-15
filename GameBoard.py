@@ -53,8 +53,17 @@ class GameBoard:
                     return y+1
         return 0
 
-    def sum_well_heights(self):
+    def col_height(self, c):
+        for j in reversed(range(self._height)):
+            if self._board[j][c] > 0:
+                return j + 1
         return 0
+
+    def sum_well_heights(self):
+        sum_heights = 0
+        for i in range(self._width - 1):
+            sum_heights += abs(self.col_height(i) - self.col_height(i + 1))
+        return sum_heights
 
     def num_completed_rows(self):
         """ Returns the number of completed (full) rows """
@@ -117,6 +126,7 @@ if __name__ == '__main__':
     print("Occupied cells: {}".format(tetrisBoard.occupied_cells()))
     print("Pile Height: {}".format(tetrisBoard.pile_height()))
     print("Holes: {}".format(tetrisBoard.num_holes()))
+    print("Sum Well Heights: {}".format(tetrisBoard.sum_well_heights()))
     tetrisBoard.clear_completed_rows() # this should not error
 
     tetrisBoard.temp_add_piece([(3,0), (4,0), (5,0), (6,0), (7,0), (8,0), (9,0)])
@@ -128,3 +138,5 @@ if __name__ == '__main__':
     tetrisBoard.add_garbage_row()
     tetrisBoard.add_garbage_row()
     print(tetrisBoard)
+    print("Column 2 height: {}".format(tetrisBoard.col_height(2)))
+    print("Column 9 height: {}".format(tetrisBoard.col_height(9)))
