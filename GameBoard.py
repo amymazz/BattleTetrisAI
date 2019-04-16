@@ -3,13 +3,7 @@ import random
 
 class GameBoard:
     def __init__(self):
-        self._width = 10
-        self._height = 20
-        self._board = [[0 for j in range(self._width)] for i in range(self._height)]
-        self._total_cells = self._width * self._height
-        self._completed_rows = []  # marks rows that can be removed
-        self._double_hole = False  # for adding garbage lines
-        self._game_over = False  # set if blocks pushed over the top
+        self.reset()
 
     def __repr__(self):
         repr = "\n"
@@ -109,6 +103,17 @@ class GameBoard:
             if top[i] > 0:
                 self._game_over = True
 
+    def is_game_over(self):
+        return self._game_over
+
+    def reset(self):
+        self._width = 10
+        self._height = 20
+        self._board = [[0 for j in range(self._width)] for i in range(self._height)]
+        self._total_cells = self._width * self._height
+        self._completed_rows = []  # marks rows that can be removed
+        self._double_hole = False  # for adding garbage lines
+        self._game_over = False  # set if blocks pushed over the top
 
     def temp_add_piece(self, piece):
         """ Function to add arbitrary pieces to the board, for testing only """
@@ -116,6 +121,8 @@ class GameBoard:
             self._board[y][x] = 1
 
 if __name__ == '__main__':
+    # Tests!
+
     tetrisBoard = GameBoard()
 
     tetrisBoard.temp_add_piece([(0,0), (1,0), (0,1), (1,1)])
@@ -140,3 +147,6 @@ if __name__ == '__main__':
     print(tetrisBoard)
     print("Column 2 height: {}".format(tetrisBoard.col_height(2)))
     print("Column 9 height: {}".format(tetrisBoard.col_height(9)))
+
+    # tetrisBoard.reset()
+    # print(tetrisBoard)
