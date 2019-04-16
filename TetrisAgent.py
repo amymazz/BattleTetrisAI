@@ -11,5 +11,9 @@ class TetrisAgent:
     def random_move(self):
         return
 
+    def update_field(self):
+        """ Updates field at end of round """
+        return
+
 if __name__ == "__main__":
     a = TetrisAgent()
