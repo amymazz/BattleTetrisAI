@@ -43,20 +43,20 @@ def play_random():
         a1.vs(a2.score())
         a2.vs(a1.score())
         
-        if a1.board.is_game_over():
+        if a1.is_game_over():
             winner = a2
             break
-        elif a2.board.is_game_over():
+        elif a2.is_game_over():
             winner = a1
             break
         
         num_turns -= 1
     
     print("a1's board:")
-    print(a1.board)
+    print(a1.game_board)
     
     print("a2's board:")
-    print(a2.board)
+    print(a2.game_board)
     print("Final scores: {}: {}, {}:{}".format(a1.name, a1.total_score, a2.name, a2.total_score))
     
 

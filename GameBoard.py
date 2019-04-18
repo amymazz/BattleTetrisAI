@@ -12,7 +12,7 @@ class GameBoard:
         self._total_cells = self.width * self.height
         self._completed_rows = []  # marks rows that can be removed
         self._double_hole = False  # for adding garbage lines
-        self._game_over = False  # set if blocks pushed over the top
+        self.game_over = False  # set if blocks pushed over the top
 
     def __repr__(self):
         repr = "\n"
@@ -112,27 +112,7 @@ class GameBoard:
 
         for i in range(len(top)):  # check if a block was pushed over the top
             if top[i] > 0:
-                self._game_over = True
-
-    def is_game_over(self):
-        return self._game_over
-        
-    def get_random_col(self, piece):
-        """ Returns a random column to put a piece in (testing only) """
-        c = random.randint(-1, self.width)
-        piece.move_to_col(c)
-        
-        while not piece.in_range(self):
-            c = random.randint(-1, self.width)
-            piece.move_to_col(c)
-            
-        return c
-        
-    def add_piece(self, piece):
-        offset_x = piece.location[0]
-        offset_y = piece.location[1]
-        for x,y in piece.shape:
-            self.board[y + offset_y][x + offset_x] = 1
+                self.game_over = True
 
     def temp_add_piece(self, piece):
         """ Function to add arbitrary pieces to the board, for testing only """
