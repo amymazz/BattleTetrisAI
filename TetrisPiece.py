@@ -91,7 +91,7 @@ class TetrisPiece:
 def get_random_piece():
     r = random.randint(0,6)
     x = ["O", "I", "T", "L", "J", "S", "Z"][r]
-    print("Chose: " + x)
+    print("Piece: " + x)
     return TetrisPiece(x)
 
 

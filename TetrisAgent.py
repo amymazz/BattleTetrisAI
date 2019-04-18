@@ -6,6 +6,7 @@ class TetrisAgent:
     def __init__(self, name, c):
         self.name = name
         self.board = GameBoard()
+        self.total_score = 0
         self._chromosome = c
         self._current_piece = None
         self._round_counter = 0
@@ -29,7 +30,6 @@ class TetrisAgent:
         self._current_piece.rotate(r)
         # choose a random column
         c = self.board.get_random_col(self._current_piece)
-        print("col: {}".format(c))
         # put the piece there
         self._current_piece.drop(self.board)
         self.board.add_piece(self._current_piece)
@@ -47,7 +47,11 @@ class TetrisAgent:
         
     def score(self):
         """ Returns score """
-        return 0
+        s = self.board.clear_completed_rows()
+        if s > 0:
+            s = (s - 1) * 3
+            self.total_score += s
+        return s
         
     def vs(self, opponentScore):
         """ Updates board based on opponent score """

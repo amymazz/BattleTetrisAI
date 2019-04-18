@@ -25,30 +25,39 @@ def main():
         
 def play_random():
     # play one game
-    agents = [ TetrisAgent("1", GA()), TetrisAgent("2", GA()) ]
-    num_turns = 1
-    loser = None
+    a1 = TetrisAgent("1", GA())
+    a2 = TetrisAgent("2", GA())
+    num_turns = 10
+    winner = None
     
     while(num_turns > 0):
         p = get_random_piece()
         
-        for a in agents:
-            a.set_current_piece(p)
-            a.random_move()
+        a1.set_current_piece(p)
+        a1.random_move()
+        
+        a2.set_current_piece(p)
+        a2.random_move()
             
         # send results to other player
-        agents[0].vs(agents[1].score())
-        agents[1].vs(agents[0].score())
+        a1.vs(a2.score())
+        a2.vs(a1.score())
         
-        for a in agents:
-            if a.board.is_game_over():
-                loser = a
-                break
+        if a1.board.is_game_over():
+            winner = a2
+            break
+        elif a2.board.is_game_over():
+            winner = a1
+            break
         
         num_turns -= 1
     
-    print(agents[0].board)
-    print(agents[1].board)
+    print("a1's board:")
+    print(a1.board)
+    
+    print("a2's board:")
+    print(a2.board)
+    print("Final scores: {}: {}, {}:{}".format(a1.name, a1.total_score, a2.name, a2.total_score))
     
 
 if __name__ == "__main__":

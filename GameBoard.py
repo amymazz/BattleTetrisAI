@@ -84,10 +84,12 @@ class GameBoard:
 
     def clear_completed_rows(self):
         """ Clears completed rows and moves everything above down """
+        r = self.num_completed_rows()
         for row in self._completed_rows:
             self.board.pop(row)
             self.board.append([0 for j in range(self.width)])
         self._completed_rows = []
+        return r
 
     def add_garbage_row(self):
         """ Adds garbage row from opponent """
@@ -121,7 +123,7 @@ class GameBoard:
         piece.move_to_col(c)
         
         while not piece.in_range(self):
-            c = random.randint(-2, self.width+1)
+            c = random.randint(-1, self.width)
             piece.move_to_col(c)
             
         return c
