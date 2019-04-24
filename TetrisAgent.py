@@ -3,7 +3,7 @@ from GameBoard import *
 from TetrisPiece import *
 
 class TetrisAgent:
-    def __init__(self, name, c):
+    def __init__(self, name="Player", c=None):
         self.name = name
         self.game_board = GameBoard()
         self.total_score = 0
@@ -16,7 +16,14 @@ class TetrisAgent:
         self._current_piece = piece
         
     def is_game_over(self):
-        return self.game_over
+        if self.game_board.game_over:
+            return True
+        max_height = self.game_board.height - 1
+        for y in range(2):
+            for x in range(self.game_board.width):
+                if (self.game_board.board[max_height - y][x] > 0):
+                    return True
+        return False
         
     def state_value(self):
         """ Evaluates the current state based on provided weights """
@@ -39,29 +46,32 @@ class TetrisAgent:
         # put the piece there
         self.drop()
         self.place_current_piece()
+        self._current_piece = None
         return
         
     def get_random_col(self):
         """ Returns a random column to put piece in (testing only) """
+        # print("get random col for piece at: ({},{})".format(self._current_piece.location[0], self._current_piece.location[1]))
         tried = [0 for i in range(self.game_board.width)]
-        print(tried)
-        c = random.randint(-2, self.game_board.width-2)
-        print("c = {}".format(c))
+        # print(tried)
+        c = random.randint(0, self.game_board.width-1)
+        # print("c = {}".format(c))
         tried[c] = 1
         self._current_piece.move_to_col(c)
         
         while not self.in_range():
             if sum(tried) >= self.game_board.width:
                 print("*** Tried all columns, could not place piece {} ***".format(self._current_piece.type))
+                # print("piece loc: ({},{})".format(self._current_piece.location[0], self._current_piece.location[1]))
                 return None
-            c = random.randint(-2, self.game_board.width-2)
-            print("c = {}".format(c))
+            c = random.randint(0, self.game_board.width-1)
+            # print("\ttrying another c = {}".format(c))
             if tried[c] > 0:
                 continue
             else:
                 tried[c] = 1
             self._current_piece.move_to_col(c)
-        print("get_random_col returning {}".format(c))
+        # print("get_random_col returning {}".format(c))
         return c
         
     def place_current_piece(self):
@@ -96,6 +106,7 @@ class TetrisAgent:
             new_x = x + offset_x
             new_y = y + offset_y
             if (new_x >= self.game_board.width) or (new_x < 0) or (new_y < 0):
+                # print("({},{}) out of range".format(new_x, new_y))
                 return False
         return True
         
@@ -126,4 +137,10 @@ class TetrisAgent:
 
 if __name__ == "__main__":
     a = TetrisAgent()
-    print(a.random_move())
+    piece = TetrisPiece("L")
+    a.set_current_piece(piece)
+    print(piece.location)
+    print("({},{})".format(piece.location[0], piece.location[1]))
+    a.place_current_piece()
+    # a.random_move()
+    print(a.game_board)

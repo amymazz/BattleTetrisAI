@@ -16,6 +16,9 @@ class GameBoard:
 
     def __repr__(self):
         repr = "\n"
+        repr += "{}\n".format(self.board[self.height-1])
+        repr += "{}\n".format(self.board[self.height-2])
+        repr += "------------------------------------\n"
         for x in reversed(range(self.height-2)):
             repr += "{}\n".format(self.board[x])
         return repr
@@ -110,6 +113,8 @@ class GameBoard:
         self._double_hole = False if self._double_hole else True
         top = self.board.pop()
 
+        # this actually needs to check if piece was pushed over top visible row,
+        # not the very top we just removed
         for i in range(len(top)):  # check if a block was pushed over the top
             if top[i] > 0:
                 self.game_over = True
