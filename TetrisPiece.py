@@ -32,9 +32,15 @@ tetriminos = {
           [(-1,-1), (-1,0), (0,0), (0,1)]]
 }
 
+id = [None, "O", "I", "T", "L", "J", "S", "Z"]
+color = [None, "0xfff600","0x00e9ff", "0xc300ff", "0xffa500",
+         "0x4004e5", "0x00cc00", "0xe50b0b"]
+
 class TetrisPiece:
     def __init__(self, type):
         self.type = type
+        self.id = id.index(type)
+        self.color = color[self.id]
         self.shape = tetriminos.get(type)[0]
         self._rotation = 0
         self.location = (4, 18)
@@ -60,7 +66,7 @@ class TetrisPiece:
         """ Moves the piece to specified column """
         y = self.location[1]
         self.location = (col, y)
-        
+
 def get_random_piece():
     r = random.randint(0,6)
     x = ["O", "I", "T", "L", "J", "S", "Z"][r]
