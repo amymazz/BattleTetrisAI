@@ -78,7 +78,7 @@ class TetrisAgent:
         offset_x = self._current_piece.location[0]
         offset_y = self._current_piece.location[1]
         for x,y in self._current_piece.shape:
-            self.game_board.board[y + offset_y][x + offset_x] = 1
+            self.game_board.board[y + offset_y][x + offset_x] = self._current_piece.id
         self._current_piece = None
             
     def drop(self):

@@ -10,23 +10,23 @@ class GameWindow(tk.Frame):
         tk.Frame.__init__(self, master)               
         self.master = master
         self.master.title("Battle Tetris")
-        self.toggle = True
+        self.frames = [[None for j in range(26)] for i in range(22)]
         self.sticky = tk.W+tk.E+tk.N+tk.S
         
-        self.frame1 = tk.Frame(self.master, bg="blue", height="20", width="20")
-        self.frame1.grid(row=0, column=0, sticky=self.sticky)
-        self.frame2 = tk.Frame(self.master, bg="red", height="20", width="20")
-        self.frame2.grid(row=1, column=1, sticky=self.sticky)
+        for row in range(22):
+            for col in range(26):
+                # TODO: don't draw frames on the border grids
+                self.frames[row][col] = tk.Frame(self.master, bg="gray", bd="1", relief="solid", height="20", width="20")
+                self.frames[row][col].grid(row=row, column=col, sticky=self.sticky)
+                col += 1
+            row += 1
         
-        rows = 0
-        cols = 0
-        while rows < 26:
-            while cols < 22:
-                self.master.columnconfigure(cols,weight=1)
-                cols += 1
-            self.master.rowconfigure(rows, weight=1)
-            
-            rows += 1
+        # # for the test thing:
+        # self.toggle = True
+        # self.frame1 = tk.Frame(self.master, bg="blue", bd="2", relief="solid", height="20", width="20")
+        # self.frame1.grid(row=0, column=0, sticky=self.sticky)
+        # self.frame2 = tk.Frame(self.master, bg="red", bd="2", relief="solid", height="20", width="20")
+        # self.frame2.grid(row=1, column=1, sticky=self.sticky)
         
     def draw_thing(self):
         if self.toggle:
@@ -37,6 +37,23 @@ class GameWindow(tk.Frame):
             self.toggle = True
             self.frame1.config(bg="blue")
             self.frame2.config(bg="red")
+            
+    def draw_game(self, board1, board2):
+        offset_row = 1
+        offset_col = 1
+        
+        bh = board1.height - 2
+        
+        for row in range(bh):
+            for col in range(board1.width):
+                color = board1.get_color(row, col)
+                self.frames[(bh - row) - offset_row][col + offset_col].config(bg=color) # this is upside down
+                col += 1
+            row += 1
+            col = 0
+        
+        offset_col = 15
+        pass
 
 def show():
     root = tk.Tk()
@@ -47,16 +64,17 @@ def show():
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
     i = 0
     
-    # root.mainloop()
     while True:
-        if i < 10:
+        if i < 5:
             p = pieces[random.randint(0,6)]
             a1.set_current_piece(TetrisPiece(p))
             a1.random_move()
+            i += 1
         
-        app.draw_thing(a1.game_board)
+        app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
         root.update()
+        time.sleep(1)
     
     return
     
@@ -71,5 +89,5 @@ def test():
         time.sleep(0.5)
     
 if __name__ == "__main__":
-    # show()
-    test()
+    show()
+    # test()

@@ -1,6 +1,9 @@
 # GameBoard.py
 import random
 
+color = ["gray", "#fff600","#00e9ff", "#c300ff", "#ffa500",
+         "#4004e5", "#00cc00", "#e50b0b"]
+         
 class GameBoard:
     def __init__(self):
         self.reset()
@@ -118,6 +121,10 @@ class GameBoard:
         for i in range(len(top)):  # check if a block was pushed over the top
             if top[i] > 0:
                 self.game_over = True
+                
+    def get_color(self, row, col):
+        id = self.board[row][col]
+        return color[id]
 
     def temp_add_piece(self, piece):
         """ Function to add arbitrary pieces to the board, for testing only """
