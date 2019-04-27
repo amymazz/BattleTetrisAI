@@ -34,8 +34,72 @@ class TetrisAgent:
         val += self._chromosome.completed_rows_weight * self.game_board.num_completed_rows()
         return val
     
+    def place_current_piece(self):
+        offset_x = self._current_piece.location[0]
+        offset_y = self._current_piece.location[1]
+        for x,y in self._current_piece.shape:
+            self.game_board.board[y + offset_y][x + offset_x] = self._current_piece.id
+        self._current_piece = None
+            
+    def drop(self):
+        """ Drops piece to bottom of board """
+        while(self.is_legal_position()):
+            self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] - 1)
+        self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] + 1)
+
+    def is_legal_position(self):
+        """ Returns True if the piece can be placed on the board """
+        if not self.in_range():
+            return False  # out of bounds
+            
+        offset_x = self._current_piece.location[0]
+        offset_y = self._current_piece.location[1]
+        for x,y in self._current_piece.shape:
+            if self.game_board.board[y + offset_y][x + offset_x] > 0:
+                return False # collision
+        return True
+
+    def in_range(self):
+        offset_x = self._current_piece.location[0]
+        offset_y = self._current_piece.location[1]
+        for x,y in self._current_piece.shape:
+            new_x = x + offset_x
+            new_y = y + offset_y
+            if (new_x >= self.game_board.width) or (new_x < 0) or (new_y < 0):
+                # print("({},{}) out of range".format(new_x, new_y))
+                return False
+        return True
+        
+    def best_move(self):
+        """ Executes the best move given the current piece """
+        return
+        
+    def score(self):
+        """ Returns score """
+        s = self.game_board.clear_completed_rows()
+        if s > 0:
+            s = (s - 1) * 3
+            self.total_score += s
+        return s
+        
+    def update(self, opponentScore):
+        """ Updates board based on opponent score """
+        # add lines from opponent
+        lines = int(opponentScore / 3)
+        for i in range(lines):
+            self.game_board.add_garbage_row()
+        
+        # add unbreakable lines every 15 rounds
+        self._round_counter += 1
+        if (self._round_counter % 15) == 0:
+            print("Round 15, adding line")
+            self.game_board.add_wall()
+        return
+    
+""" Everything below here is for testing only """
+    
     def cheat(self, count):
-        """ Straight up cheats and places complete lines """
+        """ Straight up cheats and places complete lines (for testing) """
         for i in range(count):
             self.set_current_piece(TetrisPiece("cheat"))
             self._current_piece.move_to_col(0)
@@ -77,68 +141,6 @@ class TetrisAgent:
                 tried[c] = 1
             self._current_piece.move_to_col(c)
         return c
-        
-    def place_current_piece(self):
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            self.game_board.board[y + offset_y][x + offset_x] = self._current_piece.id
-        self._current_piece = None
-            
-    def drop(self):
-        """ Drops piece to bottom of board """
-        while(self.is_legal_position()):
-            self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] - 1)
-        self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] + 1)
-
-    def is_legal_position(self):
-        """ Returns True if the piece can be placed on the board """
-        if not self.in_range():
-            return False  # out of bounds
-            
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            if self.game_board.board[y + offset_y][x + offset_x] > 0:
-                return False # collision
-        return True
-
-    def in_range(self):
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            new_x = x + offset_x
-            new_y = y + offset_y
-            if (new_x >= self.game_board.width) or (new_x < 0) or (new_y < 0):
-                # print("({},{}) out of range".format(new_x, new_y))
-                return False
-        return True
-        
-    def best_move(self):
-        """ Returns the best move given the current piece """
-        return
-        
-    def score(self):
-        """ Returns score """
-        s = self.game_board.clear_completed_rows()
-        if s > 0:
-            s = (s - 1) * 3
-            self.total_score += s
-        return s
-        
-    def update(self, opponentScore):
-        """ Updates board based on opponent score """
-        # add lines from opponent
-        lines = int(opponentScore / 3)
-        for i in range(lines):
-            self.game_board.add_garbage_row()
-        
-        # add unbreakable lines every 15 rounds
-        self._round_counter += 1
-        if (self._round_counter % 15) == 0:
-            print("Round 15, adding line")
-            self.game_board.add_wall()
-        return
 
 if __name__ == "__main__":
     a = TetrisAgent()
