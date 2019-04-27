@@ -54,21 +54,40 @@ def show():
     i = 0
     
     while True:
-        if i < 5:
+        if i < 16:
             p = pieces[random.randint(0,6)]
             
-            a1.set_current_piece(TetrisPiece(p))
-            a1.random_move()
+            # a1.set_current_piece(TetrisPiece(p))
+            # a1.random_move()
+            a1.cheat(3)
             
             a2.set_current_piece(TetrisPiece(p))
             a2.random_move()
+            
+            app.draw_game(a1.game_board, a2.game_board)
+            root.update_idletasks()
+            root.update()
+            time.sleep(0.5)
+            
+            a1_score = a1.score()
+            a2_score = a2.score()
+            
+            a1.update(a2_score)
+            a2.update(a1_score)
+            
+            if a1.is_game_over():
+                print("{} wins with score {}!".format(a2.name, a2.total_score))
+                break
+            elif a2.is_game_over():
+                print("{} wins with score {}!".format(a1.name, a1.total_score))
+                break
             
             i += 1
         
         app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
         root.update()
-        time.sleep(1)
+        time.sleep(0.5)
     
     return
     

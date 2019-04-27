@@ -33,6 +33,16 @@ class TetrisAgent:
         val += self._chromosome.well_heights_weight * self.game_board.sum_well_heights()
         val += self._chromosome.completed_rows_weight * self.game_board.num_completed_rows()
         return val
+    
+    def cheat(self, count):
+        """ Straight up cheats and places complete lines """
+        for i in range(count):
+            self.set_current_piece(TetrisPiece("cheat"))
+            self._current_piece.move_to_col(0)
+            self.drop()
+            self.place_current_piece()
+
+        self._current_piece = None
 
     def random_move(self):
         """ For testing, returns a random move ignoring value """
@@ -51,27 +61,21 @@ class TetrisAgent:
         
     def get_random_col(self):
         """ Returns a random column to put piece in (testing only) """
-        # print("get random col for piece at: ({},{})".format(self._current_piece.location[0], self._current_piece.location[1]))
         tried = [0 for i in range(self.game_board.width)]
-        # print(tried)
         c = random.randint(0, self.game_board.width-1)
-        # print("c = {}".format(c))
         tried[c] = 1
         self._current_piece.move_to_col(c)
         
         while not self.in_range():
             if sum(tried) >= self.game_board.width:
                 print("*** Tried all columns, could not place piece {} ***".format(self._current_piece.type))
-                # print("piece loc: ({},{})".format(self._current_piece.location[0], self._current_piece.location[1]))
                 return None
             c = random.randint(0, self.game_board.width-1)
-            # print("\ttrying another c = {}".format(c))
             if tried[c] > 0:
                 continue
             else:
                 tried[c] = 1
             self._current_piece.move_to_col(c)
-        # print("get_random_col returning {}".format(c))
         return c
         
     def place_current_piece(self):
@@ -113,12 +117,6 @@ class TetrisAgent:
     def best_move(self):
         """ Returns the best move given the current piece """
         return
-
-    def update(self):
-        """ Updates field at end of round """
-        if self._round_counter == 15:
-            print("Round 15, adding solid line to bottom")
-        return
         
     def score(self):
         """ Returns score """
@@ -128,11 +126,18 @@ class TetrisAgent:
             self.total_score += s
         return s
         
-    def vs(self, opponentScore):
+    def update(self, opponentScore):
         """ Updates board based on opponent score """
+        # add lines from opponent
         lines = int(opponentScore / 3)
-        while lines > 0:
+        for i in range(lines):
             self.game_board.add_garbage_row()
+        
+        # add unbreakable lines every 15 rounds
+        self._round_counter += 1
+        if (self._round_counter % 15) == 0:
+            print("Round 15, adding line")
+            self.game_board.add_wall()
         return
 
 if __name__ == "__main__":

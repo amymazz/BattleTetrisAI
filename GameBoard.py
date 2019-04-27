@@ -2,7 +2,7 @@
 import random
 
 color = ["gray", "#fff600","#00e9ff", "#c300ff", "#ffa500",
-         "#4004e5", "#00cc00", "#e50b0b"]
+         "#4004e5", "#00cc00", "#e50b0b", "magenta"]
          
 class GameBoard:
     def __init__(self):
@@ -80,26 +80,28 @@ class GameBoard:
 
         for y in range(self.height):
             x = 0
-            while x < self.width and self.board[y][x] == 1:
+            while x < self.width and self.board[y][x] > 0:
                 x += 1
             if x == self.width:
                 completed += 1
-                self._completed_rows.append(y)
-
+                self._completed_rows.append(y)  # save the row numbers that have been completed
         return completed
 
     def clear_completed_rows(self):
         """ Clears completed rows and moves everything above down """
         r = self.num_completed_rows()
-        for row in self._completed_rows:
-            self.board.pop(row)
+        
+        counter = 0  # offset once we remove rows
+        for row in self._completed_rows:  # completed_rows is ordered from smallest index to largest
+            self.board.pop(row - counter)
+            counter += 1
             self.board.append([0 for j in range(self.width)])
         self._completed_rows = []
         return r
 
     def add_garbage_row(self):
         """ Adds garbage row from opponent """
-        newRow = [1 for j in range(self.width)]
+        newRow = [8 for j in range(self.width)]
 
         h = [ None, None ]
         for i in range(len(h)):
@@ -122,9 +124,19 @@ class GameBoard:
             if top[i] > 0:
                 self.game_over = True
                 
+    def add_wall(self):
+        """ Adds an unbreakable line to the bottom of the board """
+        newRow = [-1 for j in range(self.width)]
+        self.board = [newRow] + self.board
+        top = self.board.pop()
+        return
+        
     def get_color(self, row, col):
         id = self.board[row][col]
-        return color[id]
+        if id == -1:
+            return "black"
+        else:
+            return color[id]
 
     def temp_add_piece(self, piece):
         """ Function to add arbitrary pieces to the board, for testing only """

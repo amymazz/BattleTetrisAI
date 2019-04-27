@@ -27,7 +27,7 @@ def play_random():
     # play one game
     a1 = TetrisAgent("1", GA())
     a2 = TetrisAgent("2", GA())
-    num_turns = 20
+    num_turns = 1
     winner = None
     
     while(num_turns > 0):
@@ -39,10 +39,10 @@ def play_random():
         
         a2.set_current_piece(TetrisPiece(p))
         a2.random_move()
-            
+        
         # send results to other player
-        a1.vs(a2.score())
-        a2.vs(a1.score())
+        a1.update(a2.score())
+        a2.update(a1.score())
         
         if a1.is_game_over():
             winner = a2.name
