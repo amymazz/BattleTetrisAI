@@ -28,7 +28,6 @@ class GameWindow(tk.Frame):
                 self.frames[row][col].config(bd="0")
             
     def draw_game(self, board1, board2):
-        offset_row = 1
         offset_col_a = 1
         offset_col_b = 13
         
@@ -36,8 +35,8 @@ class GameWindow(tk.Frame):
         
         for row in range(bh):
             for col in range(board1.width):
-                self.frames[(bh - row) - offset_row][col + offset_col_a].config(bg=board1.get_color(row, col))
-                self.frames[(bh - row) - offset_row][col + offset_col_b].config(bg=board2.get_color(row, col))
+                self.frames[bh - row][col + offset_col_a].config(bg=board1.get_color(row, col))
+                self.frames[bh - row][col + offset_col_b].config(bg=board2.get_color(row, col))
                 col += 1
             row += 1
             col = 0
