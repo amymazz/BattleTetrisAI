@@ -1,4 +1,5 @@
 # TetrisAgent.py
+import copy
 from GameBoard import *
 from TetrisPiece import *
 
@@ -25,54 +26,43 @@ class TetrisAgent:
                     return True
         return False
         
-    def state_value(self):
+    def state_value(self, board):
         """ Evaluates the current state based on provided weights """
-        val = self._chromosome.occupied_weight * self.game_board.occupied_cells()
-        val += self._chromosome.num_holes_weight * self.game_board.num_holes()
-        val += self._chromosome.pile_height_weight * self.game_board.pile_height()
-        val += self._chromosome.well_heights_weight * self.game_board.sum_well_heights()
-        val += self._chromosome.completed_rows_weight * self.game_board.num_completed_rows()
+        val = self._chromosome.occupied_weight * board.occupied_cells()
+        val += self._chromosome.num_holes_weight * board.num_holes()
+        val += self._chromosome.pile_height_weight * board.pile_height()
+        val += self._chromosome.well_heights_weight * board.sum_well_heights()
+        val += self._chromosome.completed_rows_weight * board.num_completed_rows()
         return val
     
-    def place_current_piece(self):
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            self.game_board.board[y + offset_y][x + offset_x] = self._current_piece.id
-        self._current_piece = None
-            
-    def drop(self):
-        """ Drops piece to bottom of board """
-        while(self.is_legal_position()):
-            self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] - 1)
-        self._current_piece.location = (self._current_piece.location[0], self._current_piece.location[1] + 1)
-
-    def is_legal_position(self):
-        """ Returns True if the piece can be placed on the board """
-        if not self.in_range():
-            return False  # out of bounds
-            
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            if self.game_board.board[y + offset_y][x + offset_x] > 0:
-                return False # collision
-        return True
-
-    def in_range(self):
-        offset_x = self._current_piece.location[0]
-        offset_y = self._current_piece.location[1]
-        for x,y in self._current_piece.shape:
-            new_x = x + offset_x
-            new_y = y + offset_y
-            if (new_x >= self.game_board.width) or (new_x < 0) or (new_y < 0):
-                # print("({},{}) out of range".format(new_x, new_y))
-                return False
-        return True
-        
     def best_move(self):
         """ Executes the best move given the current piece """
-        return
+        rotate = 0
+        col = -1
+        high_score = float("-inf")
+        
+        for r in range(4):
+            for c in range(self.game_board.width):
+                temp_board = copy.deepcopy(self.game_board)
+                temp_piece = copy.deepcopy(self._current_piece)
+                
+                temp_piece.rotate(r)
+                temp_piece.move_to_col(c)
+                
+                if temp_board.is_legal_position(temp_piece):
+                    temp_board.drop_piece(temp_piece)
+                    temp_board.place_piece(temp_piece)
+                    score = self.state_value(temp_board)
+                    if score > high_score:
+                        high_score = score
+                        rotate = r
+                        col = c
+                        
+        self._current_piece.rotate(rotate)
+        self._current_piece.move_to_col(col)
+        self.game_board.drop_piece(self._current_piece)
+        self.game_board.place_piece(self._current_piece)
+        return int(high_score)
         
     def score(self):
         """ Returns score """
@@ -96,17 +86,15 @@ class TetrisAgent:
             self.game_board.add_wall()
         return
     
-""" Everything below here is for testing only """
+    """ Everything below here is for testing only """
     
     def cheat(self, count):
         """ Straight up cheats and places complete lines (for testing) """
         for i in range(count):
             self.set_current_piece(TetrisPiece("cheat"))
             self._current_piece.move_to_col(0)
-            self.drop()
-            self.place_current_piece()
-
-        self._current_piece = None
+            self.game_board.drop_piece(self._current_piece)
+            self.game_board.place_piece(self._current_piece)
 
     def random_move(self):
         """ For testing, returns a random move ignoring value """
@@ -118,10 +106,8 @@ class TetrisAgent:
         if c is None:
             self.game_over = True
         # put the piece there
-        self.drop()
-        self.place_current_piece()
-        self._current_piece = None
-        return
+        self.game_board.drop_piece(self._current_piece)
+        self.game_board.place_piece(self._current_piece)
         
     def get_random_col(self):
         """ Returns a random column to put piece in (testing only) """
@@ -130,7 +116,7 @@ class TetrisAgent:
         tried[c] = 1
         self._current_piece.move_to_col(c)
         
-        while not self.in_range():
+        while not self.game_board.in_range(self._current_piece):
             if sum(tried) >= self.game_board.width:
                 print("*** Tried all columns, could not place piece {} ***".format(self._current_piece.type))
                 return None
@@ -143,11 +129,4 @@ class TetrisAgent:
         return c
 
 if __name__ == "__main__":
-    a = TetrisAgent()
-    piece = TetrisPiece("L")
-    a.set_current_piece(piece)
-    print(piece.location)
-    print("({},{})".format(piece.location[0], piece.location[1]))
-    a.place_current_piece()
-    # a.random_move()
-    print(a.game_board)
+    pass

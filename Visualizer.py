@@ -57,9 +57,10 @@ def show():
         if i < 16:
             p = pieces[random.randint(0,6)]
             
-            # a1.set_current_piece(TetrisPiece(p))
+            a1.set_current_piece(TetrisPiece(p))
+            a1.best_move()
             # a1.random_move()
-            a1.cheat(3)
+            # a1.cheat(3)
             
             a2.set_current_piece(TetrisPiece(p))
             a2.random_move()

@@ -137,6 +137,43 @@ class GameBoard:
             return "black"
         else:
             return color[id]
+            
+    def is_legal_position(self, piece):
+        """ Returns True if the piece can be placed on the board """
+        if not self.in_range(piece):
+            return False  # out of bounds
+            
+        offset_x = piece.location[0]
+        offset_y = piece.location[1]
+        for x,y in piece.shape:
+            if self.board[y + offset_y][x + offset_x] > 0:
+                return False # collision
+        return True
+
+    def in_range(self, piece):
+        """ Returns true if the piece is within the board boundaries """
+        offset_x = piece.location[0]
+        offset_y = piece.location[1]
+        for x,y in piece.shape:
+            new_x = x + offset_x
+            new_y = y + offset_y
+            if (new_x >= self.width) or (new_x < 0) or (new_y < 0):
+                # print("({},{}) out of range".format(new_x, new_y))
+                return False
+        return True
+            
+    def place_piece(self, piece):
+        """ Place given piece on board """
+        offset_x = piece.location[0]
+        offset_y = piece.location[1]
+        for x,y in piece.shape:
+            self.board[y + offset_y][x + offset_x] = piece.id
+            
+    def drop_piece(self, piece):
+        """ Drops piece to bottom of board """
+        while(self.is_legal_position(piece)):
+            piece.location = (piece.location[0], piece.location[1] - 1)
+        piece.location = (piece.location[0], piece.location[1] + 1)
 
     def temp_add_piece(self, piece):
         """ Function to add arbitrary pieces to the board, for testing only """
