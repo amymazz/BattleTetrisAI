@@ -48,13 +48,13 @@ def show():
     root = tk.Tk()
     app = GameWindow(root)
     
-    a1 = TetrisAgent("1", GA())
+    a1 = TetrisAgent("1", GA(occupied=0, holes=-0.65, pile=-0.10, wells=-0.20, completed=0.30)) # colin fahey weights
     a2 = TetrisAgent("2", GA())
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
     i = 0
     
     while True:
-        if i < 16:
+        if i < 50:
             p = pieces[random.randint(0,6)]
             
             a1.set_current_piece(TetrisPiece(p))
@@ -88,7 +88,7 @@ def show():
         app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
         root.update()
-        time.sleep(0.5)
+        time.sleep(0.25)
     
     return
     
