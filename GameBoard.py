@@ -146,7 +146,7 @@ class GameBoard:
         offset_x = piece.location[0]
         offset_y = piece.location[1]
         for x,y in piece.shape:
-            if self.board[y + offset_y][x + offset_x] > 0:
+            if (self.board[y + offset_y][x + offset_x] > 0) or (self.board[y + offset_y][x + offset_x] == -1):
                 return False # collision
         return True
 
