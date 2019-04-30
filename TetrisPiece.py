@@ -47,7 +47,7 @@ class TetrisPiece:
         repr = "\n"
         tmp = [[0 for j in range(4)] for i in range(4)]
         for x,y in self.shape:
-            tmp[y+2][x] = 1
+            tmp[y+2][x+1] = 1
         for i in reversed(range(4)):
             repr += "{}\n".format(tmp[i])
         return repr
@@ -75,7 +75,7 @@ def get_random_piece():
 if __name__ == "__main__":
     pieceL = TetrisPiece("L")
     print(pieceL)
-
+    
     # pieceL.rotate(1)
     # print(pieceL)
     #
@@ -90,6 +90,6 @@ if __name__ == "__main__":
 
     pieceI = TetrisPiece("I")
     print(pieceI)
-
+    
     pieceO = TetrisPiece("O")
     print(pieceO)
