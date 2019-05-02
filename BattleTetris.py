@@ -16,6 +16,7 @@ def evolve():
         num_parents = int(POPULATION_SIZE / 10)
         num_children = int(POPULATION_SIZE * 0.6 )
         output = open("output.txt", "w")
+        output.write("Population size: {}, Generations: {}".format(POPULATION_SIZE, GENERATIONS))
         
         # Initialize Population
         population = [random_individual() for i in range(POPULATION_SIZE)]
