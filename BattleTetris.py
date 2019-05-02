@@ -4,16 +4,16 @@ from GA import *
 import random
 import sys
 
-POPULATION_SIZE = 10
-GENERATIONS = 1 # I have no idea what a good number is here
+POPULATION_SIZE = 20
+GENERATIONS = 5 # I have no idea what a good number is here
 
 pieces = ["O", "I", "T", "L", "J", "S", "Z"]
 
 def evolve():
         """ GA: Single Population Competitive Coevolution """
         gen = 0
-        # num_parents = int(POPULATION_SIZE / 10)
-        num_parents = 4
+        archive = []
+        num_parents = int(POPULATION_SIZE / 10)
         num_children = int(POPULATION_SIZE * 0.6 )
         output = open("output.txt", "w")
         
@@ -31,8 +31,12 @@ def evolve():
             # Select Parents: top 10%
             rank = sorted(population, key=lambda p: p.fitness) # sort by fitness
             rank.reverse()
+            archve.append(rank[0]) # save top performer
             output.write("Rankings: {}\n".format(rank))
             parents = rank[0:num_parents]
+            
+            if gen == (GENERATIONS - 1):
+                break
             
             # Produce children:
             children = []
@@ -47,15 +51,17 @@ def evolve():
             population = parents + children
             if (len(population) != POPULATION_SIZE):
                 print("Error, population size is {}".format(len(population)))
+                return
             gen += 1
             
         # return most fit individual
         population = sorted(population, key=lambda p: p.fitness)
-        output.write("\nMost fit individual: {}".format(population[POPULATION_SIZE-1]))
+        output.write("Hall of Fame: {}\n".format(archive))
+        output.write("\n*** Most fit individual: {}".format(population[POPULATION_SIZE-1]))
         output.close()
         
-        return population[POPULATION_SIZE-1]
-        
+        return
+                
 def crossover(p1, p2):
     """ Returns offspring of p1 and p2 using single-point crossover """
     parent1 = p1.to_array()
@@ -81,9 +87,16 @@ def mutate(child):
     """ Mutates child """
     l = len(child)
     i = random.randint(0, l-1)
+    
     child[i] += random.uniform(-0.1,0.1)
-    return
+    
+    if child[i] > 1:
+        child[i] = 1
+    elif child[i] < -1:
+        child[i] = -1
         
+    return
+            
 def tournament(base_population, round=0, winners=None):
     """ Single elimination tournament, updates population fitness values """
     # winners is a list of indices into base_population
@@ -192,7 +205,7 @@ def play_random():
     
 
 if __name__ == "__main__":
-    # evolve()
+    evolve()
     
     # a1 = TetrisAgent("1", random_individual())
     # a2 = TetrisAgent("2", random_individual())
@@ -203,11 +216,11 @@ if __name__ == "__main__":
     
     
     # test mutate and crossover:
-    p1 = GAIndividual([1, 2, 3, 4, 5])
-    p2 = GAIndividual([11, 22, 33, 44, 55])
-    
-    children = crossover(p1, p2)
-    print(children)
-    
-    children = crossover(p1, p2)
-    print(children)
+    # p1 = GAIndividual([1, 2, 3, 4, 5])
+    # p2 = GAIndividual([11, 22, 33, 44, 55])
+    # 
+    # children = crossover(p1, p2)
+    # print(children)
+    # 
+    # children = crossover(p1, p2)
+    # print(children)

@@ -41,7 +41,7 @@ class TetrisAgent:
     def best_move(self):
         """ Executes the best move given the current piece """
         rotate = 0
-        col = -1
+        col = 0
         neg_inf = float("-inf")
         high_score = neg_inf
         
