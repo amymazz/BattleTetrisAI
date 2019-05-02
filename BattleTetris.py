@@ -23,13 +23,10 @@ def evolve():
         
         while gen < GENERATIONS:
             output.write("Generation {}:".format(gen))
-            sys.stdout.flush()
+            
             # Evaluate
             random.shuffle(population)
             tournament(population)
-            # print("Rankings:")
-            # for p in population:
-            #     print(p.fitness)
             
             # Select Parents: top 10%
             rank = sorted(population, key=lambda p: p.fitness) # sort by fitness
@@ -39,9 +36,10 @@ def evolve():
             
             # Produce children:
             children = []
-            for c in range(num_children):
+            for i in range(num_children):
                 # Crossover 60% of population
-                # Mutate 1%
+                p1, p2 = random.sample(parents, 2)
+                child = crossover(p1, p2)
                 
                 # temp:
                 children.append(random_individual())
@@ -58,6 +56,17 @@ def evolve():
         
         return population[POPULATION_SIZE-1]
         
+def crossover(p1, p2):
+    """ Returns offspring of p1 and p2 """
+    child = p1
+    if (random.random() < 0.02):
+        return mutate(child)
+    return child
+    
+def mutate(child):
+    """ Mutates child """
+    return child
+        
 def tournament(base_population, round=0, winners=None):
     """ Single elimination tournament, updates population fitness values """
     # winners is a list of indices into base_population
@@ -69,9 +78,9 @@ def tournament(base_population, round=0, winners=None):
         base_population[winners[0]].fitness = round
         return
     
-    print("Tournament {}".format(round))
-    print("Last Round's Winners: {}".format(winners))
-    # fitness = how many rounds won, updated on loss
+    # print("Tournament {}".format(round))
+    # print("Last Round's Winners: {}".format(winners))
+    
     new_winners = []
     r = 1
     for i in range(0, len(winners), 2):
@@ -79,16 +88,16 @@ def tournament(base_population, round=0, winners=None):
             a1 = TetrisAgent(str(i), base_population[winners[i]])
             a2 = TetrisAgent(str(i+1), base_population[winners[i+1]])
             # print("Battle {}: {} vs. {}".format(r, a1, a2))
-            print("Battle {}:".format(r))
+            # print("Battle {}:".format(r))
             sys.stdout.flush()
             winner = play_game(a1, a2)
             if winner == a1:
                 new_winners.append(winners[i]) # go on to next round
-                print("\tWinner: {}\n".format(winners[i]))
+                # print("\tWinner: {}\n".format(winners[i]))
                 base_population[winners[i+1]].fitness = round
             else:
                 new_winners.append(winners[i+1]) # go on to next round
-                print("\tWinner: {}\n".format(winners[i+1]))
+                # print("\tWinner: {}\n".format(winners[i+1]))
                 base_population[winners[i]].fitness = round
         else:
             new_winners.append(winners[i]) # free pass for odd numbers
