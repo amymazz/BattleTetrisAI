@@ -181,10 +181,10 @@ class GameBoard:
             piece.location = (piece.location[0], piece.location[1] - 1)
         piece.location = (piece.location[0], piece.location[1] + 1)
 
-    def temp_add_piece(self, piece):
+    def temp_add_piece(self, piece, value=1):
         """ Function to add arbitrary pieces to the board, for testing only """
         for x,y in piece:
-            self.board[y][x] = 1
+            self.board[y][x] = value
 
 if __name__ == '__main__':
     # Tests!
@@ -219,4 +219,11 @@ if __name__ == '__main__':
     tetrisBoard.add_garbage_row()
     tetrisBoard.add_wall()
     tetrisBoard.add_garbage_row()
+    print(tetrisBoard)
+    
+    tetrisBoard.reset()
+    tetrisBoard.temp_add_piece([(0,0), (1,0), (2,0), (3,0), (5,0), (6,0), (7,0), (8,0), (9,0)], 8)
+    tetrisBoard.temp_add_piece([(4,0)], 3)
+    print(tetrisBoard)
+    tetrisBoard.clear_completed_rows()
     print(tetrisBoard)
