@@ -14,7 +14,7 @@ def evolve():
         gen = 0
         archive = []
         num_parents = int(POPULATION_SIZE / 10)
-        num_children = int(POPULATION_SIZE * 0.6 )
+        num_children = POPULATION_SIZE - num_parents
         output = open("output.txt", "w")
         output.write("Population size: {}, Generations: {}".format(POPULATION_SIZE, GENERATIONS))
         
@@ -70,16 +70,13 @@ def crossover(p1, p2):
     
     l = len(parent1)
     k = random.randint(0,l-2)
-    print("k = {}".format(k))
     
     c1 = parent1[:k+1] + parent2[k+1:]
     c2 = parent2[:k+1] + parent1[k+1:]
     
     if (random.random() < 0.02):
-        print("Mutate c1")
         mutate(c1)
     if (random.random() < 0.02):
-        print("Mutate c2")
         mutate(c2)
         
     return [GAIndividual(c1), GAIndividual(c2)]
