@@ -8,13 +8,12 @@ class GAIndividual:
         self.pile_height_weight = pile
         self.well_heights_weight = wells
         self.completed_rows_weight = completed
+        self.fitness = 0
         
     def __repr__(self):
-        return "(occupied: {}, holes: {}, height: {}, well heights: {}, completed rows: {})".format(self.occupied_weight, 
-            self.num_holes_weight,
-            self.pile_height_weight,
-            self.well_heights_weight,
-            self.completed_rows_weight)
+        return "(occupied: {:.2f}, holes: {:.2f}, height: {:.2f}, well heights: {:.2f}, completed rows: {:.2f}, fitness: {})".format(self.occupied_weight, 
+            self.num_holes_weight, self.pile_height_weight,
+            self.well_heights_weight, self.completed_rows_weight, self.fitness)
     
 def random_individual():
     return GAIndividual(random.uniform(-1,1), random.uniform(-1,1), 
