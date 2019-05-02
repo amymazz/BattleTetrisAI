@@ -113,8 +113,15 @@ class GameBoard:
                 while h[1] == h[0]:
                     h[1] = random.randint(0, self.width-1)
                 newRow[h[1]] = 0
-
-        self.board = [newRow] + self.board
+        
+        # find the first row above unbreakable blocks
+        bottom_row = 0
+        for i in range(self.height):
+            if self.board[i][0] != -1:
+                bottom_row = i
+                break
+        
+        self.board = self.board[:bottom_row] + [newRow] + self.board[bottom_row:]
         self.double_hole = False if self.double_hole else True
         top = self.board.pop()
 
@@ -184,8 +191,8 @@ if __name__ == '__main__':
 
     tetrisBoard = GameBoard()
 
-    tetrisBoard.add_piece([(0,0), (1,0), (0,1), (1,1)])
-    tetrisBoard.add_piece([(2,0), (2,1), (2,2), (3,1)])
+    tetrisBoard.temp_add_piece([(0,0), (1,0), (0,1), (1,1)])
+    tetrisBoard.temp_add_piece([(2,0), (2,1), (2,2), (3,1)])
 
     print("Current board: {}".format(tetrisBoard))
 
@@ -207,5 +214,9 @@ if __name__ == '__main__':
     print("Column 2 height: {}".format(tetrisBoard.col_height(2)))
     print("Column 9 height: {}".format(tetrisBoard.col_height(9)))
 
-    # tetrisBoard.reset()
-    # print(tetrisBoard)
+    tetrisBoard.reset()
+    tetrisBoard.add_wall()
+    tetrisBoard.add_garbage_row()
+    tetrisBoard.add_wall()
+    tetrisBoard.add_garbage_row()
+    print(tetrisBoard)
