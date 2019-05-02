@@ -32,7 +32,7 @@ def evolve():
             # Select Parents: top 10%
             rank = sorted(population, key=lambda p: p.fitness) # sort by fitness
             rank.reverse()
-            archve.append(rank[0]) # save top performer
+            archive.append(rank[0]) # save top performer
             output.write("Rankings: {}\n".format(rank))
             parents = rank[0:num_parents]
             
