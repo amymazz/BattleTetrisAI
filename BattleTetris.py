@@ -10,7 +10,7 @@ def main():
         # Initialize Initial Population
         population = [GA.random_individual() for i in range(POPULATION_SIZE)]
         # Choose Evaluators (at random?)
-        starter = GA(occupied=0.2, holes=0.2, pile=0.2, wells=0.2, completed=0.2)
+        starter = GAIndividual(occupied=0.2, holes=0.2, pile=0.2, wells=0.2, completed=0.2)
         eval_agent = TetrisAgent("0", starter)
         # Evaluate all individuals
         # While remaining generations:
@@ -25,8 +25,8 @@ def main():
         
 def play_random():
     # play one game
-    a1 = TetrisAgent("1", GA())
-    a2 = TetrisAgent("2", GA())
+    a1 = TetrisAgent("1", GAIndividual())
+    a2 = TetrisAgent("2", GAIndividual())
     num_turns = 1
     winner = None
     
