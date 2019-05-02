@@ -48,41 +48,38 @@ def show():
     root = tk.Tk()
     app = GameWindow(root)
     
-    a1 = TetrisAgent("1", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # colin fahey weights
-    a2 = TetrisAgent("2", random_individual())
+    # a1 = TetrisAgent("1", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # colin fahey weights
+    a1 = TetrisAgent("1", GAIndividual([0.62, -0.96, 0.19, -0.26, 0.27]))
+    a2 = TetrisAgent("2", GAIndividual([-0.44, -0.58, -0.10, -0.26, 0.71]))
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
-    i = 0
     
     while True:
-        if i < 50:
-            p = pieces[random.randint(0,6)]
-            
-            a1.set_current_piece(TetrisPiece(p))
-            a1.best_move()
-            # a1.cheat(3)
-            
-            a2.set_current_piece(TetrisPiece(p))
-            a2.best_move()
-            
-            app.draw_game(a1.game_board, a2.game_board)
-            root.update_idletasks()
-            root.update()
-            time.sleep(0.5)
-            
-            a1_score = a1.score()
-            a2_score = a2.score()
-            
-            a1.update(a2_score)
-            a2.update(a1_score)
-            
-            if a1.is_game_over():
-                print("{} wins with score {}!".format(a2.name, a2.total_score))
-                break
-            elif a2.is_game_over():
-                print("{} wins with score {}!".format(a1.name, a1.total_score))
-                break
-            
-            i += 1
+        p = pieces[random.randint(0,6)]
+        
+        a1.set_current_piece(TetrisPiece(p))
+        a1.best_move()
+        # a1.cheat(3)
+        
+        a2.set_current_piece(TetrisPiece(p))
+        a2.best_move()
+        
+        app.draw_game(a1.game_board, a2.game_board)
+        root.update_idletasks()
+        root.update()
+        time.sleep(0.5)
+        
+        a1_score = a1.score()
+        a2_score = a2.score()
+        
+        a1.update(a2_score)
+        a2.update(a1_score)
+        
+        if a1.is_game_over():
+            print("{} wins with score {}!".format(a2.name, a2.total_score))
+            break
+        elif a2.is_game_over():
+            print("{} wins with score {}!".format(a1.name, a1.total_score))
+            break
         
         app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
