@@ -4,7 +4,7 @@ from GA import *
 import random
 import sys
 
-POPULATION_SIZE = 20
+POPULATION_SIZE = 50
 GENERATIONS = 5 # I have no idea what a good number is here
 
 pieces = ["O", "I", "T", "L", "J", "S", "Z"]
@@ -23,7 +23,7 @@ def evolve():
         output.write("Starting population: {}\n".format(population))
         
         while gen < GENERATIONS:
-            output.write("Generation {}:".format(gen))
+            #output.write("Generation {}:".format(gen))
             
             # Evaluate: fitness = # tournament rounds progressed
             random.shuffle(population)
@@ -33,7 +33,7 @@ def evolve():
             rank = sorted(population, key=lambda p: p.fitness) # sort by fitness
             rank.reverse()
             archive.append(rank[0]) # save top performer
-            output.write("Rankings: {}\n".format(rank))
+            #output.write("Rankings: {}\n".format(rank))
             parents = rank[0:num_parents]
             
             if gen == (GENERATIONS - 1):
@@ -47,6 +47,9 @@ def evolve():
                 new_children = crossover(p1, p2)
                 children += new_children
                 i += len(new_children)
+            while i > num_children:
+                children.pop()
+                i -= 1
 
             # Survivor Selection
             population = parents + children
