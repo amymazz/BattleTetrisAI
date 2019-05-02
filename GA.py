@@ -1,7 +1,7 @@
 # GA.py
 import random
 
-class GA:
+class GAIndividual:
     def __init__(self, occupied=0, holes=0, pile=0, wells=0, completed=0): 
         self.occupied_weight = occupied
         self.num_holes_weight = holes
@@ -9,20 +9,16 @@ class GA:
         self.well_heights_weight = wells
         self.completed_rows_weight = completed
         
-    def normalize(self):
-        """ Normalizes the weights """
-        x = self.occupied_weight + self.num_holes_weight \
-            + self.pile_height_weight + self.well_heights_weight \
-            + self.completed_rows_weight
-        self.occupied_weight /= x
-        self.num_holes_weight /= x
-        self.pile_height_weight /= x
-        self.well_heights_weight /= x
-        self.completed_rows_weight /= x
-        return
+    def __repr__(self):
+        return "Weights:\n\toccupied: {},\n\tholes: {},\n\theight: {},\n\twell heights: {},\n\tcompleted rows: {}".format(self.occupied_weight, 
+            self.num_holes_weight,
+            self.pile_height_weight,
+            self.well_heights_weight,
+            self.completed_rows_weight)
     
-def random_individual(self):
-    individual = GA(random.random(), random.random(), random.random(), \
-                    random.random(), random.random())
-    individual.normalize()
-    return individual
+def random_individual():
+    return GAIndividual(random.uniform(-1,1), random.uniform(-1,1), 
+        random.uniform(-1,1), random.uniform(-1,1), random.uniform(-1,1))
+
+if __name__ == "__main__":
+    print(random_individual())

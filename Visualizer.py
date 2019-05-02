@@ -60,11 +60,10 @@ def show():
             
             a1.set_current_piece(TetrisPiece(p))
             a1.best_move()
-            # a1.random_move()
             # a1.cheat(3)
             
             a2.set_current_piece(TetrisPiece(p))
-            a2.random_move()
+            a2.best_move()
             
             app.draw_game(a1.game_board, a2.game_board)
             root.update_idletasks()
