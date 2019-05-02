@@ -118,10 +118,9 @@ class GameBoard:
         self.double_hole = False if self.double_hole else True
         top = self.board.pop()
 
-        # this actually needs to check if piece was pushed over top visible row,
-        # not the very top we just removed
-        for i in range(len(top)):  # check if a block was pushed over the top
-            if top[i] > 0:
+        # check if this made us lose
+        for i in range(self.width):  # check if a block was pushed over the top
+            if self.board[self.height-3][i] > 0:
                 self.game_over = True
                 
     def add_wall(self):

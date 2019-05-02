@@ -13,6 +13,9 @@ class TetrisAgent:
         self.round_counter = 0
         self.game_over = False
         
+    def __repr__(self):
+        return "{}: {}".format(self.name, self.weights)
+        
     def set_current_piece(self, piece):
         self.current_piece = piece
         
@@ -39,7 +42,8 @@ class TetrisAgent:
         """ Executes the best move given the current piece """
         rotate = 0
         col = -1
-        high_score = float("-inf")
+        neg_inf = float("-inf")
+        high_score = neg_inf
         
         for r in range(4):
             for c in range(self.game_board.width):
@@ -57,12 +61,16 @@ class TetrisAgent:
                         high_score = score
                         rotate = r
                         col = c
+        if high_score == neg_inf:
+            # no valid moves
+            self.game_over = True
+            return
                         
         self.current_piece.rotate(rotate)
         self.current_piece.move_to_col(col)
         self.game_board.drop_piece(self.current_piece)
         self.game_board.place_piece(self.current_piece)
-        return int(high_score)
+        return
         
     def score(self):
         """ Returns score """
@@ -82,7 +90,6 @@ class TetrisAgent:
         # add unbreakable lines every 15 rounds
         self.round_counter += 1
         if (self.round_counter % 15) == 0:
-            print("Round 15, adding line")
             self.game_board.add_wall()
         return
     
