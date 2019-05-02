@@ -39,14 +39,14 @@ def evolve():
             if gen == (GENERATIONS - 1):
                 break
             
-            # Produce children:
+            # Produce offspring:
             children = []
             i = 0
             while i < num_children:
-                # Crossover 60% of population
                 p1, p2 = random.sample(parents, 2)
-                children += crossover(p1, p2)
-                i += len(children)
+                new_children = crossover(p1, p2)
+                children += new_children
+                i += len(new_children)
 
             # Survivor Selection
             population = parents + children
