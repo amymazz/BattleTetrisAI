@@ -40,7 +40,7 @@ class TetrisPiece:
         self.type = type
         self.id = id.index(type)
         self.shape = tetriminos.get(type)[0]
-        self._rotation = 0
+        self.rotation = 0
         self.location = (4, 18)
 
     def __repr__(self):
@@ -55,9 +55,9 @@ class TetrisPiece:
     def rotate(self, r):
         """ Rotates piece 90 degrees """
         for i in range(r):
-            x = (self._rotation + 1) % 4
+            x = (self.rotation + 1) % 4
             self.shape = tetriminos.get(self.type)[x]
-            self._rotation = x
+            self.rotation = x
         return
 
     def move_to_col(self, col):

@@ -12,9 +12,9 @@ class GameBoard:
         self.width = 10
         self.height = 22
         self.board = [[0 for j in range(self.width)] for i in range(self.height)]
-        self._total_cells = self.width * self.height
-        self._completed_rows = []  # marks rows that can be removed
-        self._double_hole = False  # for adding garbage lines
+        self.total_cells = self.width * self.height
+        self.completed_rows = []  # marks rows that can be removed
+        self.double_hole = False  # for adding garbage lines
         self.game_over = False  # set if blocks pushed over the top
 
     def __repr__(self):
@@ -84,7 +84,7 @@ class GameBoard:
                 x += 1
             if x == self.width:
                 completed += 1
-                self._completed_rows.append(y)  # save the row numbers that have been completed
+                self.completed_rows.append(y)  # save the row numbers that have been completed
         return completed
 
     def clear_completed_rows(self):
@@ -92,11 +92,11 @@ class GameBoard:
         r = self.num_completed_rows()
         
         counter = 0  # offset once we remove rows
-        for row in self._completed_rows:  # completed_rows is ordered from smallest index to largest
+        for row in self.completed_rows:  # completed_rows is ordered from smallest index to largest
             self.board.pop(row - counter)
             counter += 1
             self.board.append([0 for j in range(self.width)])
-        self._completed_rows = []
+        self.completed_rows = []
         return r
 
     def add_garbage_row(self):
@@ -108,14 +108,14 @@ class GameBoard:
             if h[0] is None:
                 h[0] = random.randint(0, self.width-1)
                 newRow[h[0]] = 0
-            elif self._double_hole:
+            elif self.double_hole:
                 h[1] = h[0]
                 while h[1] == h[0]:
                     h[1] = random.randint(0, self.width-1)
                 newRow[h[1]] = 0
 
         self.board = [newRow] + self.board
-        self._double_hole = False if self._double_hole else True
+        self.double_hole = False if self.double_hole else True
         top = self.board.pop()
 
         # this actually needs to check if piece was pushed over top visible row,
