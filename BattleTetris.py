@@ -24,7 +24,7 @@ def evolve():
         while gen < GENERATIONS:
             output.write("Generation {}:".format(gen))
             
-            # Evaluate
+            # Evaluate: fitness = # tournament rounds progressed
             random.shuffle(population)
             tournament(population)
             
@@ -36,17 +36,17 @@ def evolve():
             
             # Produce children:
             children = []
-            for i in range(num_children):
+            i = 0
+            while i < num_children:
                 # Crossover 60% of population
                 p1, p2 = random.sample(parents, 2)
-                child = crossover(p1, p2)
-                
-                # temp:
-                children.append(random_individual())
-                continue
+                children += crossover(p1, p2)
+                i += len(children)
 
             # Survivor Selection
             population = parents + children
+            if (len(population) != POPULATION_SIZE):
+                print("Error, population size is {}".format(len(population)))
             gen += 1
             
         # return most fit individual
@@ -57,15 +57,32 @@ def evolve():
         return population[POPULATION_SIZE-1]
         
 def crossover(p1, p2):
-    """ Returns offspring of p1 and p2 """
-    child = p1
+    """ Returns offspring of p1 and p2 using single-point crossover """
+    parent1 = p1.to_array()
+    parent2 = p2.to_array()
+    
+    l = len(parent1)
+    k = random.randint(0,l-2)
+    print("k = {}".format(k))
+    
+    c1 = parent1[:k+1] + parent2[k+1:]
+    c2 = parent2[:k+1] + parent1[k+1:]
+    
     if (random.random() < 0.02):
-        return mutate(child)
-    return child
+        print("Mutate c1")
+        mutate(c1)
+    if (random.random() < 0.02):
+        print("Mutate c2")
+        mutate(c2)
+        
+    return [GAIndividual(c1), GAIndividual(c2)]
     
 def mutate(child):
     """ Mutates child """
-    return child
+    l = len(child)
+    i = random.randint(0, l-1)
+    child[i] += random.uniform(-0.1,0.1)
+    return
         
 def tournament(base_population, round=0, winners=None):
     """ Single elimination tournament, updates population fitness values """
@@ -136,8 +153,8 @@ def play_game(a1, a2):
 
 def play_random():
     # play one game
-    a1 = TetrisAgent("1", GAIndividual())
-    a2 = TetrisAgent("2", GAIndividual())
+    a1 = TetrisAgent("1", random_individual()())
+    a2 = TetrisAgent("2", random_individual()())
     num_turns = 1
     winner = None
     
@@ -175,9 +192,7 @@ def play_random():
     
 
 if __name__ == "__main__":
-    evolve()
-    
-    # play_random()
+    # evolve()
     
     # a1 = TetrisAgent("1", random_individual())
     # a2 = TetrisAgent("2", random_individual())
@@ -185,3 +200,14 @@ if __name__ == "__main__":
     # print("{}".format(a2))
     # winner = play_game(a1, a2)
     # print("{} wins!".format(winner.name)) 
+    
+    
+    # test mutate and crossover:
+    p1 = GAIndividual([1, 2, 3, 4, 5])
+    p2 = GAIndividual([11, 22, 33, 44, 55])
+    
+    children = crossover(p1, p2)
+    print(children)
+    
+    children = crossover(p1, p2)
+    print(children)

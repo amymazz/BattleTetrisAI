@@ -48,8 +48,7 @@ def show():
     root = tk.Tk()
     app = GameWindow(root)
     
-    a1 = TetrisAgent("1", GAIndividual(occupied=0, holes=-0.65, pile=-0.10, wells=-0.20, completed=0.30)) # colin fahey weights
-    # a2 = TetrisAgent("2", GAIndividual())
+    a1 = TetrisAgent("1", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # colin fahey weights
     a2 = TetrisAgent("2", random_individual())
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
     i = 0
