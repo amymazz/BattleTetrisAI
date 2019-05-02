@@ -10,7 +10,7 @@ class GAIndividual:
         self.completed_rows_weight = completed
         
     def __repr__(self):
-        return "Weights:\n\toccupied: {},\n\tholes: {},\n\theight: {},\n\twell heights: {},\n\tcompleted rows: {}".format(self.occupied_weight, 
+        return "(occupied: {}, holes: {}, height: {}, well heights: {}, completed rows: {})".format(self.occupied_weight, 
             self.num_holes_weight,
             self.pile_height_weight,
             self.well_heights_weight,
