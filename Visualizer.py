@@ -46,11 +46,23 @@ class GameWindow(tk.Frame):
 
 def show():
     root = tk.Tk()
+    root.geometry("+200+150")
+
     app = GameWindow(root)
     
-    # a1 = TetrisAgent("1", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # colin fahey weights
-    a1 = TetrisAgent("1", GAIndividual([0.62, -0.96, 0.19, -0.26, 0.27]))
-    a2 = TetrisAgent("2", GAIndividual([-0.44, -0.58, -0.10, -0.26, 0.71]))
+    # a1 = TetrisAgent("bot", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # fahey weights
+    # [0.62, -0.96, 0.19, -0.26, 0.27]
+    # [-0.44, -0.58, -0.10, -0.26, 0.71]
+    # a1 = TetrisAgent("1", GAIndividual([0.99, -1.00, -0.11, -0.90, 0.59])) # pop=20, gen=5, mut=2%
+    # a2 = TetrisAgent("amy", GAIndividual([0.62, -0.96, 0.19, -0.26, 0.27])) # pop=50, gen=5, mut=2%
+    # a2 = TetrisAgent("amy", GAIndividual([-0.73, -0.92, -0.01, -0.19, 0.78])) # pop=50, gen=5, mut=10%
+    # a2 = TetrisAgent("amy", GAIndividual([-0.91, -0.97, -0.24, -0.16, 0.88])) # pop=50, gen=5, mut=10%, 20% parents second best
+    # a2 = TetrisAgent("amy2", GAIndividual([-0.44, -0.58, -0.10, -0.26, 0.71])) # pop=50, gen=10, mut=2%
+    # a2 = TetrisAgent("amy", GAIndividual([-0.93, -0.96, -0.17, -0.01, 0.61])) # pop=80, gen=10, mut=5% best so far
+    
+    a1 = TetrisAgent("dumb", GAIndividual([-0.27, 0.81, 0.57, -0.55, 0.97]))
+    a2 = TetrisAgent("dumber", GAIndividual([0.23, -0.71, -0.43, 0.72, 0.56])) # builds towers
+    
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
     
     while True:
@@ -66,7 +78,7 @@ def show():
         app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
         root.update()
-        time.sleep(0.5)
+        time.sleep(0.1)
         
         a1_score = a1.score()
         a2_score = a2.score()
@@ -84,8 +96,17 @@ def show():
         app.draw_game(a1.game_board, a2.game_board)
         root.update_idletasks()
         root.update()
-        time.sleep(0.25)
+        time.sleep(0.1)
     
+    # print stats:
+    print("\nGame Duration: {} Rounds".format(a1.round_counter))
+    
+    for a in [a1, a2]:
+        print("{} Stats:".format(a.name))
+        print("Final score: {}".format(a.total_score))
+        print("Rows cleared: {}".format(a.rows_cleared))
+        print("Lines sent: {}".format(a.lines_sent))
+        print("")
     return
     
     

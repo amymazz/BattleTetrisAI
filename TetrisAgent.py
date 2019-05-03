@@ -11,6 +11,8 @@ class TetrisAgent:
         self.weights = GA
         self.current_piece = None
         self.round_counter = 0
+        self.rows_cleared = 0
+        self.lines_sent = 0
         self.game_over = False
         
     def __repr__(self):
@@ -20,7 +22,7 @@ class TetrisAgent:
         self.current_piece = piece
         
     def is_game_over(self):
-        if self.game_board.game_over:
+        if self.game_board.game_over or self.game_over:
             return True
         max_height = self.game_board.height - 1
         for y in range(2):
@@ -75,6 +77,8 @@ class TetrisAgent:
     def score(self):
         """ Returns score """
         s = self.game_board.clear_completed_rows()
+        self.rows_cleared += s
+        self.lines_sent += (s - 1) if (s > 1) else 0
         if s > 0:
             s = (s - 1) * 3
             self.total_score += s
