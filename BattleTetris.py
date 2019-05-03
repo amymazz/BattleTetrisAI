@@ -4,8 +4,8 @@ from GA import *
 import random
 import sys
 
-POPULATION_SIZE = 50
-GENERATIONS = 5 # I have no idea what a good number is here
+POPULATION_SIZE = 80
+GENERATIONS = 10
 
 pieces = ["O", "I", "T", "L", "J", "S", "Z"]
 
@@ -33,7 +33,6 @@ def evolve():
             rank = sorted(population, key=lambda p: p.fitness) # sort by fitness
             rank.reverse()
             archive.append(rank[0]) # save top performer
-            #output.write("Rankings: {}\n".format(rank))
             parents = rank[0:num_parents]
             
             if gen == (GENERATIONS - 1):
@@ -77,9 +76,9 @@ def crossover(p1, p2):
     c1 = parent1[:k+1] + parent2[k+1:]
     c2 = parent2[:k+1] + parent1[k+1:]
     
-    if (random.random() < 0.1):
+    if (random.random() < 0.05):
         mutate(c1)
-    if (random.random() < 0.1):
+    if (random.random() < 0.05):
         mutate(c2)
         
     return [GAIndividual(c1), GAIndividual(c2)]
@@ -109,26 +108,19 @@ def tournament(base_population, round=0, winners=None):
         base_population[winners[0]].fitness = round
         return
     
-    # print("Tournament {}".format(round))
-    # print("Last Round's Winners: {}".format(winners))
-    
     new_winners = []
     r = 1
     for i in range(0, len(winners), 2):
         if i < (len(winners)-1):
             a1 = TetrisAgent(str(i), base_population[winners[i]])
             a2 = TetrisAgent(str(i+1), base_population[winners[i+1]])
-            # print("Battle {}: {} vs. {}".format(r, a1, a2))
-            # print("Battle {}:".format(r))
             sys.stdout.flush()
             winner = play_game(a1, a2)
             if winner == a1:
                 new_winners.append(winners[i]) # go on to next round
-                # print("\tWinner: {}\n".format(winners[i]))
                 base_population[winners[i+1]].fitness = round
             else:
                 new_winners.append(winners[i+1]) # go on to next round
-                # print("\tWinner: {}\n".format(winners[i+1]))
                 base_population[winners[i]].fitness = round
         else:
             new_winners.append(winners[i]) # free pass for odd numbers

@@ -50,18 +50,18 @@ def show():
 
     app = GameWindow(root)
     
-    # a1 = TetrisAgent("bot", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # fahey weights
-    # [0.62, -0.96, 0.19, -0.26, 0.27]
-    # [-0.44, -0.58, -0.10, -0.26, 0.71]
-    # a1 = TetrisAgent("1", GAIndividual([0.99, -1.00, -0.11, -0.90, 0.59])) # pop=20, gen=5, mut=2%
-    # a2 = TetrisAgent("amy", GAIndividual([0.62, -0.96, 0.19, -0.26, 0.27])) # pop=50, gen=5, mut=2%
-    # a2 = TetrisAgent("amy", GAIndividual([-0.73, -0.92, -0.01, -0.19, 0.78])) # pop=50, gen=5, mut=10%
-    # a2 = TetrisAgent("amy", GAIndividual([-0.91, -0.97, -0.24, -0.16, 0.88])) # pop=50, gen=5, mut=10%, 20% parents second best
-    # a2 = TetrisAgent("amy2", GAIndividual([-0.44, -0.58, -0.10, -0.26, 0.71])) # pop=50, gen=10, mut=2%
-    # a2 = TetrisAgent("amy", GAIndividual([-0.93, -0.96, -0.17, -0.01, 0.61])) # pop=80, gen=10, mut=5% best so far
+    a1 = TetrisAgent("bot", GAIndividual([0, -0.65, -0.10, -0.20, 0.30])) # fahey weights
+    a2 = TetrisAgent("Amy", GAIndividual([-0.13, -0.80, -0.18, -0.04, 0.27])) # pop=50, gen=10, mut=5%, 20% parent best so far
     
-    a1 = TetrisAgent("dumb", GAIndividual([-0.27, 0.81, 0.57, -0.55, 0.97]))
-    a2 = TetrisAgent("dumber", GAIndividual([0.23, -0.71, -0.43, 0.72, 0.56])) # builds towers
+    # a1 = TetrisAgent("1", GAIndividual([0.99, -1.00, -0.11, -0.90, 0.59])) # pop=20, gen=5, mut=2%
+    # a2 = TetrisAgent("2", GAIndividual([0.62, -0.96, 0.19, -0.26, 0.27])) # pop=50, gen=5, mut=2%
+    # a2 = TetrisAgent("3", GAIndividual([-0.73, -0.92, -0.01, -0.19, 0.78])) # pop=50, gen=5, mut=10%
+    # a2 = TetrisAgent("4", GAIndividual([-0.91, -0.97, -0.24, -0.16, 0.88])) # pop=50, gen=5, mut=10%, 20% parents third best
+    # a2 = TetrisAgent("5", GAIndividual([-0.44, -0.58, -0.10, -0.26, 0.71])) # pop=50, gen=10, mut=2%
+    # a1 = TetrisAgent("6", GAIndividual([-0.93, -0.96, -0.17, -0.01, 0.61])) # pop=80, gen=10, mut=5% second best
+
+    # a1 = TetrisAgent("dumb", GAIndividual([-0.27, 0.81, 0.57, -0.55, 0.97])) # zigzags
+    # a2 = TetrisAgent("dumber", GAIndividual([0.23, -0.71, -0.43, 0.72, 0.56])) # builds towers
     
     pieces = ["O", "I", "T", "L", "J", "S", "Z"]
     
@@ -112,4 +112,3 @@ def show():
     
 if __name__ == "__main__":
     show()
-    # test()

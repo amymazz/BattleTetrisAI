@@ -1,8 +1,10 @@
 # GameBoard.py
 import random
 
-color = ["gray", "#fff600","#00e9ff", "#c300ff", "#ffa500",
-         "#4004e5", "#00cc00", "#e50b0b", "magenta"]
+# color = ["gray", "#fff600","#00e9ff", "#c300ff", "#ffa500",
+#          "#4004e5", "#00cc00", "#e50b0b", "magenta"]
+color = ["#525252", "#ffdf5e","#03bcf2", "#953593", "#f89b39",
+         "#006daa", "#89c650", "#e61d23", "#898989"]
          
 class GameBoard:
     def __init__(self):
